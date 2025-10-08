@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roadmap Generator — Checklist UI</title>
+
+  <!-- Keep your stylesheet and Tailwind -->
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&family=Raleway:wght@100..900&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#a8dadc] flex p-0 m-0 flex-col overflow-y-hidden">
+  <!-- HEADER (mostly unchanged) -->
+  <div class="w-screen bg-[#F1FAEE] h-20 flex items-center justify-between">
+    <div class="flex gap-2 mx-6 text-[#0e2229]">
+      <img src="logo.png" alt="logo" loading="lazy" class="h-12 w-12 my-4"/>
+      <div class="flex flex-col items-start justify-center">
+        <p class="align-middle text-2xl font-extrabold font-Nunito">
+          AI Roadmap & Checklist Generator
+        </p>
+      </div>
+    </div>
+
+    <div class="option flex items-center justify-around space-x-5 pr-52 text-[#0e2229] font-Nunito">
+      <!-- placeholder for future header actions -->
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="flex items-start justify-between p-4 gap-4">
+    <!-- LEFT: prompt input -->
+    <div class="flex flex-col items-start pl-2 h-[600px] w-[540px]">
+      <h1 class="headText text-[#b23a50] font-bold text-[44px] mb-2">Generate Roadmap</h1>
+      <p class="secondHeader text-[#0e2229] pb-4 text-left">Type a concise project prompt (include timebox like "14 days" or "21 days" and any 'alreadyDone' items). Example: <em>Build roadmap for Goal & Productivity Module, timebox 14 days, alreadyDone: SSO login</em></p>
+
+      <!-- PROMPT TEXTAREA (ID used by frontend script) -->
+      <!-- CHANGE NOTE: kept a single prompt textarea only (no JSON input). -->
+      <textarea id="userInput" aria-label="Project prompt" class="h-[220px] w-[500px] rounded-lg bg-[#F1FAEE] resize-none text-[#0e222a] p-3 mr-3 hover:border-[#0e1f28] transition-all duration-300 ease-in-out" placeholder="Enter prompt (e.g. 'Build roadmap for Goal & Productivity Module, timebox 14 days, alreadyDone: SSO login')"></textarea>
+
+      <!-- Generate button -->
+      <div class="mt-3">
+        <button id="generateBtn" class="flex items-center justify-center py-2 px-4 font-mono font-extrabold rounded-lg bg-gradient-to-r from-[#EDDD53] via-[#C757B4] to-[#2A7B9B]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="h-[22px] mr-2" fill="#000000">
+            <path d="M10.764,2.002l1.749,4.022c0.506,0.506,0.958,0.958,1.464,1.464l4.022,1.749c0,0.728,0,0.799,0,1.527l-4.022,1.749	c-0.506,0.506-0.958,0.958-1.464,1.464l-1.749,4.022c-0.728,0-0.799,0-1.527,0l-1.749-4.022c-0.506-0.506-0.958-0.958-1.464-1.464	l-4.022-1.749c0-0.728,0-0.799,0-1.527l4.022-1.749c0.506-0.506,0.958-0.958,1.464-1.464l1.749-4.022	C9.964,2.002,10.036,2.002,10.764,2.002z"></path>
+            <path d="M18.38,14.031l0.796,1.83c0.333,0.333,0.63,0.63,0.963,0.963l1.83,0.796c0,0.362,0,0.398,0,0.76l-1.83,0.796	c-0.333,0.333-0.63,0.63-0.963,0.963l-0.796,1.83c-0.362,0-0.398,0-0.76,0l-0.796-1.83c-0.333-0.333-0.63-0.63-0.963-0.963	l-1.83-0.796c0-0.362,0-0.398,0-0.76l1.83-0.796c0.333-0.333,0.63-0.63,0.963-0.963l0.796-1.83	C17.982,14.031,18.018,14.031,18.38,14.031z"></path>
+          </svg>
+          <span class="buttonText">Generate Roadmap</span>
+        </button>
+
+        <!-- RESET button (optional UI hook; script can implement behavior) -->
+        <!-- CHANGE NOTE: added reset button with id 'resetChecklistBtn' for convenience. -->
+        <button id="resetChecklistBtn" class="ml-3 px-3 py-2 rounded-lg bg-[#ef4444] text-white text-sm">Reset Checklist</button>
+      </div>
+
+      <!-- small note -->
+      <p class="mt-3 text-sm text-[#0e2229]">Tip: include "alreadyDone: <item>" in prompt to have that task pre-checked by the model.</p>
+    </div>
+
+    <!-- RIGHT: results / interactive checklist -->
+    <div class="result-container bg-[#1D3557] rounded-lg p-6 h-[600px] w-[820px] overflow-hidden">
+      <div class="flex items-center justify-between">
+        <div class="text-3xl font-extrabold">
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#512931] to-[#af485c]">Generated Roadmap</span>
+          <span class="text-[#af485c]"> :</span>
+        </div>
+
+        <!-- Download and copy controls (optional helpers) -->
+        <div class="flex gap-2">
+          <!-- CHANGE NOTE: 'downloadChecklistBtn' available for future use by your frontend script -->
+          <button id="downloadChecklistBtn" class="px-3 py-1 rounded bg-[#2a6b8f] text-white text-sm">Download Checklist</button>
+          <button id="copyMarkdownBtn" class="px-3 py-1 rounded bg-[#3b82f6] text-white text-sm">Copy Markdown</button>
+        </div>
+      </div>
+
+      <!-- PLACEHOLDER: options-container is required by your script.js -->
+      <!-- CHANGE NOTE: this is the single results pane that the script parses & renders into nested checkboxes. -->
+      <div id="options-container" class="post-preview mt-4 h-[520px] overflow-y-auto p-3 bg-[#0f2740] rounded-lg text-[#e6eef3]">
+        <p class="placeholder-text">Your generated roadmap checklist will appear here after you click "Generate Roadmap".</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load your frontend JS (replace path if your script is located elsewhere) -->
+  <!-- CHANGE NOTE: This file should contain the DOMContentLoaded handler / parser & localStorage logic. -->
+  <script src="script.js"></script>
+
+  <!-- Inline helpers for the small buttons (copy/download/reset) so UI is usable even if your script.js hasn't implemented them yet.
+       These are minimal and safe; your main script can override or expand them. -->
+  <script>
+    // Minimal UI helpers — will not interfere if your script.js has its own handlers.
+    (function(){
+      const copyBtn = document.getElementById('copyMarkdownBtn');
+      const downloadBtn = document.getElementById('downloadChecklistBtn');
+      const resetBtn = document.getElementById('resetChecklistBtn');
+      const optionsContainer = document.getElementById('options-container');
+
+      // Copy the currently-visible rendered checklist as plain markdown (best-effort).
+      copyBtn && copyBtn.addEventListener('click', () => {
+        // Try to find markdown stored in a data attribute (script.js could set it),
+        // otherwise fall back to serializing visible text.
+        const md = optionsContainer.getAttribute('data-md') || optionsContainer.innerText || '';
+        if (!md) { alert('Nothing to copy'); return; }
+        navigator.clipboard.writeText(md).then(() => alert('Markdown copied to clipboard'));
+      });
+
+      // Download the current checklist as .md (simple text file).
+      downloadBtn && downloadBtn.addEventListener('click', () => {
+        const md = optionsContainer.getAttribute('data-md') || optionsContainer.innerText || '';
+        if (!md) { alert('Nothing to download'); return; }
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
+        a.download = 'roadmap.md';
+        document.body.appendChild(a); a.click(); a.remove();
+      });
+
+      // Reset checklist: attempt to clear localStorage keys for this prompt.
+      // This is a convenience; your main script can provide a stronger implementation.
+      resetBtn && resetBtn.addEventListener('click', () => {
+        // Ask your main script to handle reset by dispatching an event
+        window.dispatchEvent(new CustomEvent('resetChecklistRequested'));
+        // also do a best-effort localStorage cleanup:
+        try {
+          // If your script.js stores a current storageKey on container dataset, clear keys by prefix.
+          const storageKey = optionsContainer.dataset.storageKey;
+          if (storageKey) {
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const k = localStorage.key(i);
+              if (k && k.startsWith(storageKey)) keysToRemove.push(k);
+            }
+            keysToRemove.forEach(k => localStorage.removeItem(k));
+            alert('Checklist reset (local state cleared).');
+            // Optionally re-render empty placeholder
+            optionsContainer.innerHTML = '<p class="placeholder-text">Checklist state cleared. Click Generate again to fetch roadmap.</p>';
+          } else {
+            alert('No checklist state found to reset. Generate a roadmap first.');
+          }
+        } catch (e) {
+          console.warn('Reset failed', e);
+          alert('Reset failed — see console.');
+        }
+      });
+    })();
+  </script>
+
+  <!-- CHANGE SUMMARY (quick reference for devs):
+       - Removed JSON input area; single `#userInput` prompt area only.
+       - Kept `#generateBtn` as trigger (script.js should POST { prompt } to /generate-post).
+       - Added `#options-container` as the single results pane for parsed checklist (required by script.js).
+       - Added small helper buttons: copy, download, reset (hook events or use the inline handlers above).
+       - Inline helpers dispatch a 'resetChecklistRequested' event so your script.js can perform a proper reset/sync.
+  -->
+
+</body>
+</html>

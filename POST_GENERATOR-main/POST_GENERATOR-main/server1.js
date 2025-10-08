@@ -1,6 +1,6 @@
-// server.js
+// server.js (only changed portions shown; keep your existing setup)
 const express = require('express');
-const { GoogleGenAI } = require('@google/genai'); // official client per quickstart
+const { GoogleGenAI } = require('@google/genai'); // keep as before
 const cors = require('cors');
 require('dotenv').config();
 
@@ -9,22 +9,16 @@ app.use(express.json());
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
-// keep using your existing env name if that's what you have
 const GEMINI_API_KEY = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
-
 if (!GEMINI_API_KEY) {
   console.error('Missing API key. Set GOOGLE_API_KEY or GEMINI_API_KEY in your .env');
   process.exit(1);
 }
-
-// The official JS quickstart reads GEMINI_API_KEY from process.env
 process.env.GEMINI_API_KEY = GEMINI_API_KEY;
+const ai = new GoogleGenAI({});
+const MODEL_ID = 'gemini-2.5-flash'; // keep your chosen model
 
-const ai = new GoogleGenAI({}); // client will pick up process.env.GEMINI_API_KEY
-
-// Use a supported model — gemini-2.5-flash is recommended by the quickstart docs
-const MODEL_ID = 'gemini-2.5-flash';
-
+// <-- Paste the new systemPrompt here (from section 1) -->
 const systemPrompt = `You are RoadmapBuilder — a concise, pragmatic planner that outputs a branched, checklist-style roadmap in Markdown only.
 Do NOT output JSON or machine-only wrappers. Produce only human-readable Markdown that follows this exact structure so clients can parse it:
 
@@ -78,26 +72,24 @@ app.post('/generate-post', async (req, res) => {
       return res.status(400).json({ error: 'Prompt is required' });
     }
 
-    const fullPrompt = `${systemPrompt}\n\nUSER TOPIC: "${userPrompt}"`;
+    // Build the combined prompt — system + user instructions.
+    const fullPrompt = `${systemPrompt}\n\nUSER INPUT:\n${userPrompt}\n\nIf the request mentions 'alreadyDone' or 'existingModules', mark those tasks as done (- [x] ...)`;
 
-    // Call the official client's generateContent method
     const result = await ai.models.generateContent({
       model: MODEL_ID,
-      // The quickstart accepts a simple string for `contents`
       contents: fullPrompt,
-      // Optional: you can tune generation config here (thinkingConfig, temperature, etc.)
-      // config: { thinkingConfig: { thinkingBudget: 0 } } // example to disable "thinking"
+      // optional config tweaks: temperature, max tokens, etc.
+      // config: { temperature: 0.2 }
     });
 
-    // The SDK can return result.text or result.text() depending on version.
-    const generatedText =
-      typeof result.text === 'function' ? await result.text() : result.text;
+    const generatedText = typeof result.text === 'function' ? await result.text() : result.text;
 
+    // IMPORTANT: we return only plaintext Markdown in `post`.
+    // The frontend expects `data.post` to be Markdown with "- [ ]" items.
     res.json({ post: generatedText });
 
   } catch (error) {
     console.error('Error:', error);
-    // if the error is from the API, send back useful info (but not your key)
     const message = error?.message || 'Failed to generate post';
     res.status(500).json({ error: message });
   }
