@@ -2,138 +2,215 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Roadmap Generator — Checklist UI</title>
-
-  <!-- Keep your stylesheet and Tailwind -->
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&family=Raleway:wght@100..900&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Roadmap Generator — Chat Style</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* tiny extra styles used by script.js and placeholders */
+    .placeholder-text { color: #6C757D; font-weight: 600; }
+  </style>
 </head>
+<body class="bg-[#FFFFFF] text-[#000000] font-[Nunito] flex flex-col min-h-screen">
 
-<body class="bg-[#a8dadc] h-screen flex p-0 m-0 flex-col overflow-x-hidden">
-  <!-- HEADER (mostly unchanged) -->
-  <div class="w-screen bg-[#F1FAEE] h-[50px] h-max-[100px] flex items-center justify-between">    
-    <img src="" alt="">
-    <h2 class="font-bold text-[#003049] text-[26px]">MINISTRY OF JAL SHAKTI</h2>
-    <P>USER</P>    
-  </div>
-    <!-- up: results / interactive checklist -->
-    <div class="result-container rounded-lg p-6 h-[600px] overflow-hidden">
-      <div class="flex items-center justify-between">
-        <div class="text-3xl font-extrabold">
-          <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#512931] to-[#af485c]">Generated Roadmap</span>
-          <span class="text-[#af485c]"> :</span>
-        </div>
-
-        <!-- Download and copy controls (optional helpers) -->
-        <div class="flex gap-2">
-          <!-- CHANGE NOTE: 'downloadChecklistBtn' available for future use by your frontend script -->
-          <button id="downloadChecklistBtn" class="px-3 py-1 rounded bg-[#2a6b8f] text-white text-sm">Download Checklist</button>
-          <button id="copyMarkdownBtn" class="px-3 py-1 rounded bg-[#3b82f6] text-white text-sm">Copy Markdown</button>
-        </div>
+  <!-- HEADER -->
+  <header class="flex justify-between items-center py-4 px-6 border-b border-[#2c2c2c]">
+    <h1 class="text-xl font-bold tracking-wide text-[#000000] underline">Ministry of Jal-Sansthan</h1>
+    <div class="flex items-center gap-3 text-sm">
+      <div class="text-right leading-tight">
+        <p class="font-semibold text-[#000000]">Admin</p>
+        <p class="text-[#333333] text-xs">User ID: JAL-001</p>
       </div>
+      <div class="w-8 h-8 rounded-full bg-[#6C757D] flex items-center justify-center text-[#ffffff] font-bold">A</div>
+    </div>
+  </header>
 
-      <!-- PLACEHOLDER: options-container is required by your script.js -->
-      <!-- CHANGE NOTE: this is the single results pane that the script parses & renders into nested checkboxes. -->
-      <div id="options-container" class="post-preview h-[520px] overflow-y-auto p-3 bg-[#0f2740] rounded-lg text-[#e6eef3]">
-        <p class="placeholder-text">Your generated roadmap checklist will appear here after you click "Generate Roadmap".</p>
+  <!-- MAIN CHAT AREA -->
+  <main class="flex-1 flex justify-center items-stretch px-4 relative pb-[22vh]">
+    <div class="w-full max-w-3xl flex flex-col bg-[#F8F9FA] rounded-2xl border border-[#2f2f2f] overflow-hidden">
+
+      <!-- RESULT WINDOW -->
+      <!-- Keep it empty — script.js will write into this element. It also expects to set innerHTML to a placeholder when generating. -->
+      <div id="options-container"
+           class="p-6 space-y-5 relative h-auto empty:space-y-0 empty:flex empty:flex-col empty:items-center empty:justify-center empty:min-h-[60vh]
+                  empty:before:content-['Ready\\ when\\ you\\ are.'] empty:before:block empty:before:text-center
+                  empty:before:text-3xl md:empty:before:text-4xl empty:before:font-semibold empty:before:tracking-tight
+                  empty:before:text-[#212529] empty:before:mb-6
+                  empty:after:content-['Ask\\ anything'] empty:after:block empty:after:w-full empty:after:max-w-[560px]
+                  empty:after:h-[52px] empty:after:rounded-full empty:after:bg-[#222] empty:after:border empty:after:border-[#333]
+                  empty:after:text-[#212529] empty:after:px-6 empty:after:leading-[52px] empty:after:text-[15px]
+                  empty:after:shadow-[0_1px_2px_rgba(0,0,0,0.2),0_8px_40px_rgba(0,0,0,0.35)]">
       </div>
     </div>
-  <!-- MAIN LAYOUT -->
-    <div class="flex flex-col justify-center align-middle p-4 gap-4 ">
-      <!-- PROMPT TEXTAREA (ID used by frontend script) -->
-      <!-- CHANGE NOTE: kept a single prompt textarea only (no JSON input). -->
-      <!-- <textarea id="userInput" class="h-[50px] w-[600px] rounded-5xl bg-[#F1FAEE] resize-none text-[#0e222a] p-3 hover:border-[#0e1f28] transition-all duration-300 ease-in-out" placeholder="Enter prompt (e.g. 'Build roadmap for Goal & Productivity Module, timebox 14 days, alreadyDone: SSO login')">
-      </textarea> -->
-      <div class="w-max-[800px] bg-[#D62828] flex flex-row h-[50px] w-[600px] m-auto bg-[#F1FAEE] align-middle resize-none text-[#0e222a] hover:border-[#0e1f28] transition-all duration-300 ease-in-out">
-        <textarea name="roadmapInfo" id="userInput" placeholder="Enter Your Project here" aria-label="Project prompt" class="mt-[5px] p-2 border-0 bg-[#F1FAEE] resize-none h-[40px] w-[500px]"></textarea>  
-        <div class="flex-row flex">
-          <button id="generateBtn" class="flex items-center justify-center font-mono font-extrabold px-[15px] rounded-5xl bg-[#52B69A]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#000000">
-              <path d="M10.764,2.002l1.749,4.022c0.506,0.506,0.958,0.958,1.464,1.464l4.022,1.749c0,0.728,0,0.799,0,1.527l-4.022,1.749	c-0.506,0.506-0.958,0.958-1.464,1.464l-1.749,4.022c-0.728,0-0.799,0-1.527,0l-1.749-4.022c-0.506-0.506-0.958-0.958-1.464-1.464	l-4.022-1.749c0-0.728,0-0.799,0-1.527l4.022-1.749c0.506-0.506,0.958-0.958,1.464-1.464l1.749-4.022	C9.964,2.002,10.036,2.002,10.764,2.002z"></path>
-              <path d="M18.38,14.031l0.796,1.83c0.333,0.333,0.63,0.63,0.963,0.963l1.83,0.796c0,0.362,0,0.398,0,0.76l-1.83,0.796	c-0.333,0.333-0.63,0.63-0.963,0.963l-0.796,1.83c-0.362,0-0.398,0-0.76,0l-0.796-1.83c-0.333-0.333-0.63-0.63-0.963-0.963	l-1.83-0.796c0-0.362,0-0.398,0-0.76l1.83-0.796c0.333-0.333,0.63-0.63,0.963-0.963l0.796-1.83	C17.982,14.031,18.018,14.031,18.38,14.031z"></path>
-            </svg>
+  </main>
+
+  <!-- COMPOSER -->
+  <div class="sticky bottom-[5vh] left-0 w-full flex justify-center px-4 z-50">
+    <div class="w-full max-w-3xl flex items-center gap-2 bg-[#FFFFFF] border border-[#2c2c2c] rounded-2xl shadow-[0_-2px_10px_rgba(0,0,0,0.4)] p-3">
+
+      <!-- File picker column (keeps IDs separate from backend scripts) -->
+      <div class="relative">
+        <div class="flex flex-col gap-1">
+          <button id="mic" class="InputFile px-3 h-10 cursor-pointer transition-all hover:shadow-lg rounded-full bg-[#ADB5BD] focus:outline-none">
+          <img src="imgIcon/icons8-mic-96.png" class="h-6" alt="">
+          </button>
+          <button id="inputFileBtn" aria-label="Add file" class="InputFile text-2xl px-3 h-8 cursor-pointer transition-all hover:shadow-lg rounded-full bg-[#ADB5BD] focus:outline-none">
+          +
           </button>
         </div>
-      </div> 
-      <!-- RESET button (optional UI hook; script can implement behavior) -->
-      <!-- CHANGE NOTE: added reset button with id 'resetChecklistBtn' for convenience. -->
-      <button id="resetChecklistBtn" class=" rounded-lg bg-[#52B69A] text-white text-sm">""</button> 
+
+        <!-- popup for file type selection -->
+        <div id="filePickerPopup" class="hidden absolute bottom-12 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-xl shadow-lg w-44 z-50">
+          <div class="p-2">
+            <button data-type="image" class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center"><img src="imgIcon/icons8-image-96.png" class="h-6 mr-2" alt=""> Upload Image</button>
+            <button data-type="pdf" class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center"><img src="imgIcon/icons8-pdf-96.png" class="h-6 mr-2" alt=""> Upload PDF</button>
+            <button data-type="video" class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center"><img src="imgIcon/icons8-video-96.png" class="h-6 mr-2" alt=""> Upload Video</button>
+            <button data-type="any" class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 flex items-center"><img src="imgIcon/icons8-file-96.png" class="h-6 mr-2" alt=""> Upload File</button>
+            <button id="filePickerCancel" class="w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm text-gray-600 flex items-center"><img src="imgIcon/icons8-cancel-96.png" class="h-5 mr-2 opacity-50" alt="">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- The text area used by your script.js -->
+      <textarea id="userInput"
+                placeholder="Enter your message..."
+                class="flex-1 bg-transparent border border-[#3a3a3a] rounded-xl p-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#457B9D]
+                       resize-none min-h-[48px] h-auto max-h-[30vh] overflow-y-auto text-[#000000] placeholder:text-[#8e8e8e]"></textarea>
+
+      <button id="generateBtn" class="bg-[#6C757D] hover:bg-[#7A8590] transition-all duration-200 rounded-xl px-4 py-2 font-bold text-[#0d0d0d]">
+        Send
+      </button>
+
+      <!-- Hidden inputs used by file picker preview (frontend only) -->
+      <input id="imageInput" type="file" accept="image/*" style="display:none" multiple />
+      <input id="pdfInput" type="file" accept="application/pdf" style="display:none" multiple />
+      <input id="videoInput" type="file" accept="video/*" style="display:none" multiple />
+      <input id="anyInput" type="file" style="display:none" multiple />
+
     </div>
+  </div>
 
-  <!-- Load your frontend JS (replace path if your script is located elsewhere) -->
-  <!-- CHANGE NOTE: This file should contain the DOMContentLoaded handler / parser & localStorage logic. -->
-  <script src="script.js"></script>
+  <!-- FOOTER CONTROLS -->
+  <footer class="fixed bottom-0 left-0 w-full flex justify-center items-center py-2 gap-2 text-xs text-[#888] border-t border-[#2c2c2c] bg-[#131313] z-40">
+    <button id="downloadChecklistBtn" class="px-3 py-1 rounded bg-[#27272a] hover:bg-[#3f3f46] text-[#e3e3e3]">Download</button>
+    <button id="copyMarkdownBtn" class="px-3 py-1 rounded bg-[#27272a] hover:bg-[#3f3f46] text-[#e3e3e3]">Copy</button>
+    <button id="resetChecklistBtn" class="px-3 py-1 rounded bg-[#27272a] hover:bg-[#3f3f46] text-[#e3e3e3]">Reset</button>
+  </footer>
 
-  <!-- Inline helpers for the small buttons (copy/download/reset) so UI is usable even if your script.js hasn't implemented them yet.
-       These are minimal and safe; your main script can override or expand them. -->
+  <!-- Inline file-picker behavior (isolated, won't interfere with your script.js) -->
   <script>
-    // Minimal UI helpers — will not interfere if your script.js has its own handlers.
-    (function(){
-      const copyBtn = document.getElementById('copyMarkdownBtn');
-      const downloadBtn = document.getElementById('downloadChecklistBtn');
-      const resetBtn = document.getElementById('resetChecklistBtn');
+    (function () {
+      const inputFileBtn = document.getElementById('inputFileBtn');
+      const popup = document.getElementById('filePickerPopup');
+      const imageInput = document.getElementById('imageInput');
+      const pdfInput = document.getElementById('pdfInput');
+      const videoInput = document.getElementById('videoInput');
+      const anyInput = document.getElementById('anyInput');
       const optionsContainer = document.getElementById('options-container');
+      const filePickerCancel = document.getElementById('filePickerCancel');
 
-      // Copy the currently-visible rendered checklist as plain markdown (best-effort).
-      copyBtn && copyBtn.addEventListener('click', () => {
-        // Try to find markdown stored in a data attribute (script.js could set it),
-        // otherwise fall back to serializing visible text.
-        const md = optionsContainer.getAttribute('data-md') || optionsContainer.innerText || '';
-        if (!md) { alert('Nothing to copy'); return; }
-        navigator.clipboard.writeText(md).then(() => alert('Markdown copied to clipboard'));
+      // Toggle popup
+      inputFileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        popup.classList.toggle('hidden');
       });
 
-      // Download the current checklist as .md (simple text file).
-      downloadBtn && downloadBtn.addEventListener('click', () => {
-        const md = optionsContainer.getAttribute('data-md') || optionsContainer.innerText || '';
-        if (!md) { alert('Nothing to download'); return; }
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
-        a.download = 'roadmap.md';
-        document.body.appendChild(a); a.click(); a.remove();
+      // Close popup on outside click
+      document.addEventListener('click', () => {
+        if (!popup.classList.contains('hidden')) popup.classList.add('hidden');
       });
 
-      // Reset checklist: attempt to clear localStorage keys for this prompt.
-      // This is a convenience; your main script can provide a stronger implementation.
-      resetBtn && resetBtn.addEventListener('click', () => {
-        // Ask your main script to handle reset by dispatching an event
-        window.dispatchEvent(new CustomEvent('resetChecklistRequested'));
-        // also do a best-effort localStorage cleanup:
+      // Prevent closing when clicking inside popup
+      popup.addEventListener('click', (e) => e.stopPropagation());
+      filePickerCancel.addEventListener('click', () => popup.classList.add('hidden'));
+
+      // Wire choices to hidden inputs
+      popup.querySelectorAll('button[data-type]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const t = btn.dataset.type;
+          popup.classList.add('hidden');
+          if (t === 'image') imageInput.click();
+          else if (t === 'pdf') pdfInput.click();
+          else if (t === 'video') videoInput.click();
+          else anyInput.click();
+        });
+      });
+
+      const addPreview = (file, kind) => {
         try {
-          // If your script.js stores a current storageKey on container dataset, clear keys by prefix.
-          const storageKey = optionsContainer.dataset.storageKey;
-          if (storageKey) {
-            const keysToRemove = [];
-            for (let i = 0; i < localStorage.length; i++) {
-              const k = localStorage.key(i);
-              if (k && k.startsWith(storageKey)) keysToRemove.push(k);
-            }
-            keysToRemove.forEach(k => localStorage.removeItem(k));
-            alert('Checklist reset (local state cleared).');
-            // Optionally re-render empty placeholder
-            optionsContainer.innerHTML = '<p class="placeholder-text">Checklist state cleared. Click Generate again to fetch roadmap.</p>';
+          const wrapper = document.createElement('div');
+          wrapper.className = 'flex items-center gap-3 p-3 rounded-lg bg-white border border-gray-200 shadow-sm';
+
+          const info = document.createElement('div');
+          info.className = 'flex-1';
+
+          const title = document.createElement('div');
+          title.className = 'font-semibold text-sm';
+          title.textContent = file.name;
+
+          const meta = document.createElement('div');
+          meta.className = 'text-xs text-gray-500';
+          meta.textContent = `${(file.size / 1024).toFixed(1)} KB • ${file.type || 'Unknown'}`;
+
+          info.appendChild(title);
+          info.appendChild(meta);
+
+          if (kind === 'image') {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              img.alt = file.name;
+              img.className = 'w-20 h-20 object-cover rounded-md border';
+              wrapper.prepend(img);
+            };
+            reader.readAsDataURL(file);
           } else {
-            alert('No checklist state found to reset. Generate a roadmap first.');
+            const icon = document.createElement('div');
+            icon.className = 'w-20 h-20 flex items-center justify-center rounded-md border text-xs text-gray-600';
+            icon.textContent = kind === 'pdf' ? 'PDF' : kind === 'video' ? 'VIDEO' : 'FILE';
+            wrapper.prepend(icon);
           }
+
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'ml-2 px-2 py-1 rounded bg-red-50 text-red-600 text-xs';
+          removeBtn.textContent = 'Remove';
+          removeBtn.addEventListener('click', () => wrapper.remove());
+
+          wrapper.appendChild(info);
+          wrapper.appendChild(removeBtn);
+
+          // Prepend to options container so this preview is visible above results
+          optionsContainer.prepend(wrapper);
+          if (optionsContainer.classList.contains('empty')) optionsContainer.classList.remove('empty');
         } catch (e) {
-          console.warn('Reset failed', e);
-          alert('Reset failed — see console.');
+          console.warn('Preview failed', e);
         }
+      };
+
+      imageInput.addEventListener('change', (e) => {
+        for (const f of e.target.files) addPreview(f, 'image');
+        e.target.value = '';
+      });
+      pdfInput.addEventListener('change', (e) => {
+        for (const f of e.target.files) addPreview(f, 'pdf');
+        e.target.value = '';
+      });
+      videoInput.addEventListener('change', (e) => {
+        for (const f of e.target.files) addPreview(f, 'video');
+        e.target.value = '';
+      });
+      anyInput.addEventListener('change', (e) => {
+        for (const f of e.target.files) addPreview(f, 'file');
+        e.target.value = '';
       });
     })();
   </script>
 
-  <!-- CHANGE SUMMARY (quick reference for devs):
-       - Removed JSON input area; single `#userInput` prompt area only.
-       - Kept `#generateBtn` as trigger (script.js should POST { prompt } to /generate-post).
-       - Added `#options-container` as the single results pane for parsed checklist (required by script.js).
-       - Added small helper buttons: copy, download, reset (hook events or use the inline handlers above).
-       - Inline helpers dispatch a 'resetChecklistRequested' event so your script.js can perform a proper reset/sync.
-  -->
+  <!-- YOUR frontend logic file (do NOT change this) -->
+  <script src="script.js"></script>
 
 </body>
 </html>

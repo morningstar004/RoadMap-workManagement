@@ -75,17 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (node.type === 'heading') {
         const h = document.createElement(node.level === 1 ? 'h2' : 'h3');
         h.innerText = node.text;
-        h.className = 'text-white font-bold';
+        h.className = 'text-[#374151] font-bold';
         container.appendChild(h);
       } else if (node.type === 'para') {
         const p = document.createElement('p');
         p.innerText = node.text;
-        p.className = 'text-gray-200 text-sm mb-2';
+        p.className = 'text-[#374151] text-sm mb-2';
         container.appendChild(p);
       } else if (node.type === 'bullet') {
         const li = document.createElement('li');
         li.innerText = node.text;
-        li.className = 'text-gray-200';
+        li.className = 'text-[#374151]';
         ulStack[ulStack.length - 1].appendChild(li);
       } else if (node.type === 'task') {
         // ensure ul for depth
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ulStack.length = node.depth + 1;
 
         const li = document.createElement('li');
-        li.className = 'text-gray-100 mb-1';
+        li.className = 'text-[#374151] mb-1';
         const id = storageKey + '::' + sanitizeKey(node.content);
 
         const checkbox = document.createElement('input');
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    optionsContainer.innerHTML = '<p class="placeholder-text text-white">Generating roadmap…</p>';
+    optionsContainer.innerHTML = '<p class="placeholder-text text-[#374151]">Generating roadmap…</p>';
     generateBtn.disabled = true;
 
     try {
